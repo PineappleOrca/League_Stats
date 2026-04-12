@@ -2,11 +2,13 @@
 from my_secrets import get_api_key, get_account_name
 from riotwatcher import LolWatcher, ApiError
 import pandas as pd
-from os import listdir
-from os.path import isfile, join
+#from os import listdir
+#from os.path import isfile, join
+import os
 import glob
 import csv
 import json
+from dotenv import load_dot_env
 
 def get_account_information(watcher, region, account_name):
     '''
@@ -67,8 +69,10 @@ def get_match_data(watcher, region):
     ->
     '''
     # Source File paths on local computer
-    match_list_src = '/Users/kevin/Documents/Kevin/Projects/my_league_stats/Data/match_database/match_database.csv'
-    match_data_src = '/Users/kevin/Documents/Kevin/Projects/my_league_stats/Data/match_data/'
+    match_list_src = os.getenv("MATCH_LIST_SRC")
+    match_data_src = os.getenv("MATCH_DATA_SRC")
+    #match_list_src = '/Users/kevin/Documents/Kevin/Projects/my_league_stats/Data/match_database/match_database.csv'
+    #match_data_src = '/Users/kevin/Documents/Kevin/Projects/my_league_stats/Data/match_data/'
 
     # getting total match list from database, and list of matches already stored 
     match_list = get_match_list_from_database(match_list_src)
@@ -80,7 +84,8 @@ def get_match_data(watcher, region):
         print(f"Data for Match: {match} has been written!")
 
 def write_match_data(watcher, match_id, region):
-    file_path = '/Users/kevin/Documents/Kevin/Projects/my_league_stats/Data/match_data/'
+    file_path = os.getenv("MATCH_DATA_SRC")
+    #file_path = '/Users/kevin/Documents/Kevin/Projects/my_league_stats/Data/match_data/'
     file_name = file_path + match_id + '.json'
     match_detail = watcher.match.by_id(region, match_id)
     match_info = match_detail['info']
@@ -95,7 +100,7 @@ def get_list_of_files(path):
     OUTPUT -> returns a list of files in the PATH and subtracts the file ending '.json' from it
     '''
     file_ending = '.json'
-    list_of_files = [f.replace(file_ending,'') for f in listdir(path) if isfile(join(path,f))]
+    list_of_files = [f.replace(file_ending,'') for f in os.listdir(path) if os.isfile(os.join(path,f))]
     return list_of_files
 
 
