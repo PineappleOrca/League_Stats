@@ -4,7 +4,7 @@ from my_secrets import get_api_key, get_account_name
 from riotwatcher import LolWatcher, ApiError
 from menu import get_user_input
 import os
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 
 # Getting secrets infor like API Key and account name
 riot_api_key = get_api_key()

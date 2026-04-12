@@ -8,7 +8,7 @@ import os
 import glob
 import csv
 import json
-from dotenv import load_dot_env
+# from dotenv import load_dotenv
 
 def get_account_information(watcher, region, account_name):
     '''
