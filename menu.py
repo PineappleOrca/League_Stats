@@ -16,7 +16,7 @@ def get_user_input():
 
 def get_server(region_num):
     region_mapping = {
-        1: 'euw1',
+        1: 'europe',
         2: 'euw1',
         3: 'kr'
     }

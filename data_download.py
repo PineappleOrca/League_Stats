@@ -15,14 +15,14 @@ def get_account_information(watcher, region, account_name):
     This Function takes in the watcher, region (string) and the account name (string singular)
     -> Outputs information on the account
     '''
-    me = watcher.summoner.by_name(region, account_name)
+    me = watcher.summoner.by_puuid(region, account_name)
     return me
 
 def get_ranked_stats(watcher, region, data):
     '''
     This function takes in the watcher, region and the output from the get_account_information function and returns the ranked stats for that account
     '''
-    ranked_stats = watcher.league.by_summoner(region, data['id'])
+    ranked_stats = watcher.league.by_puuid(region, data['id'])
     return ranked_stats
 
 def get_match_list(watcher, region, data):
