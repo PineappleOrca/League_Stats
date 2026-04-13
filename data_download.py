@@ -2,13 +2,10 @@
 from my_secrets import get_api_key, get_account_name
 from riotwatcher import LolWatcher, ApiError
 import pandas as pd
-#from os import listdir
-#from os.path import isfile, join
 import os
 import glob
 import csv
 import json
-# from dotenv import load_dotenv
 
 def get_account_information(watcher, region, account_name):
     '''
