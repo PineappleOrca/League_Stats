@@ -17,10 +17,14 @@ if __name__ == '__main__':
     account_list = data_dict[region]
     for account in account_list:
         print(f"Account being processed: {account}")
-        data = data_download.get_account_information(watcher, region, account)
-        matches = data_download.get_match_list(watcher, region, data)
+        print("Getting data.....")
+        #data = data_download.get_account_information(watcher, region, account)
+        print("Getting matches.....")
+        matches = data_download.get_match_list(watcher, region, account)
         #get_match_data(watcher, region, match_id)
+        print("Getting match list from database....")
         x = data_download.get_match_list_from_database(os.getenv("MATCH_LIST_SRC"))
-        match_list = data_download.build_match_database(watcher, region, data)
+        print("Building Match database.....")
+        match_list = data_download.build_match_database(watcher, region, account)
         data_download.get_match_data(watcher, region)
     print(f"There are {len(x)} games in the database!")

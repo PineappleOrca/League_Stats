@@ -25,15 +25,15 @@ def get_ranked_stats(watcher, region, data):
     ranked_stats = watcher.league.by_puuid(region, data['id'])
     return ranked_stats
 
-def get_match_list(watcher, region, data):
+def get_match_list(watcher, region, puuid):
     '''
     This function takes in the watcher, the region and the output from get_account_information and then 
     returns a list of 20 instances with match ids
     '''
-    my_matches = watcher.match.matchlist_by_puuid(region, data['puuid'])
+    my_matches = watcher.match.matchlist_by_puuid(region, puuid)
     return my_matches
 
-def build_match_database(watcher, region, data):
+def build_match_database(watcher, region, puuid):
     '''
     This Function takes in watcher, region and data from the get_account_information 
     AIM -> Build Global Database of matches with match ids since I can only request 20 instances at a time, I need to keep appending to the Global Database
@@ -42,7 +42,7 @@ def build_match_database(watcher, region, data):
     # Path to the Database
     path_to_match_database = '/Users/kevin/Documents/Kevin/Projects/my_league_stats/Data/match_database/match_database.csv'
     match_list = get_match_list_from_database(path_to_match_database)
-    latest_match_list = get_match_list(watcher, region, data)
+    latest_match_list = get_match_list(watcher, region, puuid)
     # Appending the global match list on the database to the latest 20 games pulled from the API
     match_list = match_list + latest_match_list
     # Converting the list to a set so that only the unique values are stored
@@ -100,7 +100,7 @@ def get_list_of_files(path):
     OUTPUT -> returns a list of files in the PATH and subtracts the file ending '.json' from it
     '''
     file_ending = '.json'
-    list_of_files = [f.replace(file_ending,'') for f in os.listdir(path) if os.isfile(os.join(path,f))]
+    list_of_files = [f.replace(file_ending,'') for f in os.listdir(path) if os.path.isfile(os.path.join(path,f))]
     return list_of_files
 
 
