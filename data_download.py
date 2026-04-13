@@ -71,15 +71,13 @@ def get_match_data(watcher, region):
     # Source File paths on local computer
     match_list_src = os.getenv("MATCH_LIST_SRC")
     match_data_src = os.getenv("MATCH_DATA_SRC")
-    #match_list_src = '/Users/kevin/Documents/Kevin/Projects/my_league_stats/Data/match_database/match_database.csv'
-    #match_data_src = '/Users/kevin/Documents/Kevin/Projects/my_league_stats/Data/match_data/'
-
     # getting total match list from database, and list of matches already stored 
     match_list = get_match_list_from_database(match_list_src)
     list_of_files = get_list_of_files(match_data_src)
     new_match_list = [x for x in match_list if x not in list_of_files]
     print(new_match_list)
     print(f"{len(new_match_list)} new games detected!")
+    bad_match_list = []
     for match in new_match_list:
         print(f"Writing data for Match: {match}!")
         if match.startswith("KR"):
@@ -91,11 +89,15 @@ def get_match_data(watcher, region):
             print(f"Data for Match: {match} has been written!")
         except Exception as e:
             print(f"Error for match: {match} with error {e}")
+            bad_match_list.append(match)
             continue
+    if bad_match_list:
+        print("Cleaning up the match database")
+        clean_match_list(bad_match_list)
+        print("Clean up complete!")
 
 def write_match_data(watcher, match_id, region):
     file_path = os.getenv("MATCH_DATA_SRC")
-    #file_path = '/Users/kevin/Documents/Kevin/Projects/my_league_stats/Data/match_data/'
     file_name = file_path + match_id + '.json'
     try:
         match_detail = watcher.match.by_id(region, match_id)
@@ -115,5 +117,21 @@ def get_list_of_files(path):
     file_ending = '.json'
     list_of_files = [f.replace(file_ending,'') for f in os.listdir(path) if os.path.isfile(os.path.join(path,f))]
     return list_of_files
+
+def clean_match_list(match_list: str) -> None:
+    match_list = set(match_list)
+    original_rows = []
+    file_path = os.getenv('MATCH_LIST_SRC')
+    with open(file_path, 'r', newline='') as f:
+        reader = csv.reader(f)
+        header = next(reader)
+        for row in reader:
+            original_rows.append(row)
+    new_history = [row for row in original_rows if row[1] not in match_list]
+    with open(file_path, 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(header)
+        writer.writerows(new_history)
+    print(f"Bad matches have been removed from the match database!")
 
 

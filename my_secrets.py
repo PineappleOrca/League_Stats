@@ -12,7 +12,7 @@ def get_account_name():
     return account_list
 
 def get_my_accounts():
-    account_list = [os.getenv("SMURF_1")]
+    account_list = [os.getenv("SMURF_1"), os.getenv("MAIN_ACC")]
     return account_list 
 
 def get_other_accounts():
