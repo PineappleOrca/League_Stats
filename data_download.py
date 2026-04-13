@@ -77,17 +77,30 @@ def get_match_data(watcher, region):
     # getting total match list from database, and list of matches already stored 
     match_list = get_match_list_from_database(match_list_src)
     list_of_files = get_list_of_files(match_data_src)
-    new_match_list = [x for x in match_list if x not in list_of_files] 
+    new_match_list = [x for x in match_list if x not in list_of_files]
+    print(new_match_list)
     print(f"{len(new_match_list)} new games detected!")
     for match in new_match_list:
-        write_match_data(watcher, match, region)
-        print(f"Data for Match: {match} has been written!")
+        print(f"Writing data for Match: {match}!")
+        if match.startswith("KR"):
+            region = "asia"
+        elif match.startswith("EUW"):
+            region = "europe"
+        try:
+            write_match_data(watcher, match, region)
+            print(f"Data for Match: {match} has been written!")
+        except Exception as e:
+            print(f"Error for match: {match} with error {e}")
+            continue
 
 def write_match_data(watcher, match_id, region):
     file_path = os.getenv("MATCH_DATA_SRC")
     #file_path = '/Users/kevin/Documents/Kevin/Projects/my_league_stats/Data/match_data/'
     file_name = file_path + match_id + '.json'
-    match_detail = watcher.match.by_id(region, match_id)
+    try:
+        match_detail = watcher.match.by_id(region, match_id)
+    except Exception as e:
+        print(f"Error for match: {match_id} with error {e}")
     match_info = match_detail['info']
     json_object = json.dumps(match_info)
     with open(file_name, 'w') as f:
