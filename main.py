@@ -1,6 +1,6 @@
 #from data_download import *
 import data_download
-from my_secrets import get_api_key, get_account_name
+from my_secrets import get_api_key, get_account_name, get_ign
 from riotwatcher import LolWatcher, ApiError
 from menu import get_user_input
 import os
@@ -16,7 +16,8 @@ if __name__ == '__main__':
     region = list(data_dict.keys())[0]  
     account_list = data_dict[region]
     for account in account_list:
-        print(f"Account being processed: {account}")
+        ign = get_ign(account)
+        print(f"Account being processed: {ign}")
         print("Getting data.....")
         #data = data_download.get_account_information(watcher, region, account)
         print("Getting matches.....")
@@ -27,4 +28,5 @@ if __name__ == '__main__':
         print("Building Match database.....")
         match_list = data_download.build_match_database(watcher, region, account)
         data_download.get_match_data(watcher, region)
+    x = data_download.get_match_list_from_database(os.getenv("MATCH_LIST_SRC"))
     print(f"There are {len(x)} games in the database!")

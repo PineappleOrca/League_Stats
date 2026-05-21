@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from enum import Enum
 
 def get_api_key() -> str:
     load_dotenv()
@@ -12,7 +13,7 @@ def get_account_name():
     return account_list
 
 def get_my_accounts():
-    account_list = [os.getenv("SMURF_1"), os.getenv("MAIN_ACC")]
+    account_list = [os.getenv("SMURF_1"), os.getenv("MAIN_ACC"), os.getenv("SMURF_2")]
     return account_list 
 
 def get_other_accounts():
@@ -23,4 +24,17 @@ def get_other_accounts():
 def get_korea_accounts():
     print("Currently Not a supported/Active function, since 2023 hasnt been updated!")
     account_list = ['']
-    return account_list 
+    return account_list
+
+def get_account_map() -> dict:
+    return {
+        os.getenv("MAIN_ACC"): os.getenv("MAIN_NAME"),
+        os.getenv("SMURF_1"): os.getenv("SMURF_1_NAME"),
+        os.getenv("SMURF_2"): os.getenv("SMURF_2_NAME")
+    }
+
+def get_ign(account_id: str) -> str:
+    accounts = get_account_map()
+    return accounts.get(account_id, "Unknown Player")
+
+
