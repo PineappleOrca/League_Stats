@@ -1,5 +1,6 @@
 from riotwatcher import LolWatcher, ApiError
 from my_secrets import get_api_key
+import requests
 
 def get_mastery_points(api_key, region, summoner_name, champion_id):
     # Initialize the LolWatcher with your API key
@@ -19,6 +20,24 @@ def get_mastery_points(api_key, region, summoner_name, champion_id):
 
 def estimate_games_played(master_points, win_rate):
     return master_points/(900.0*win_rate + 100.0)
+
+def get_champion_id_map() -> dict:
+    # 1. Get the latest game patch version from Riot's version endpoint
+    version_url = "https://ddragon.leagueoflegends.com/api/versions.json"
+    latest_version = requests.get(version_url).json()[0]
+    
+    # 2. Fetch the master champion JSON file for that specific version
+    data_url = f"https://ddragon.leagueoflegends.com/cdn/{latest_version}/data/en_US/champion.json"
+    response = requests.get(data_url).json()
+    champion_data = response["data"]
+    
+    # 3. Riot maps things by name key (e.g., {"Aatrox": {"key": "266", ...}})
+    # We invert it so we can easily look it up by ID number instead
+    champion_map = {}
+    for champ_name, details in champion_data.items():
+        champ_id = int(details["key"]) # Riot stores IDs as strings, cast to int
+        champion_map[champ_id] = details["name"]
+    return champion_map
 
 # Replace with your Riot API key
 riot_api_key = get_api_key()
