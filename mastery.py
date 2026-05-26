@@ -18,6 +18,19 @@ def get_mastery_points(api_key: str, region: str, summoner_name: str, champion_i
     except ApiError as e:
         print(f"Error: {e.response.status_code} - {e.response.text}")
         return None
+    
+def test_get_mastery_points(api_key: str, region: str, summoner_name: str) -> int:
+    # Initialize the LolWatcher with your API key
+    watcher = LolWatcher(api_key)
+    try:
+        # Get summoner information
+        summoner = watcher.summoner.by_puuid(region, summoner_name)
+        # Get mastery information for the given champion
+        champion_mastery = watcher.champion_mastery.by_puuid(region, summoner["puuid"])
+        return champion_mastery
+    except ApiError as e:
+        print(f"Error: {e.response.status_code} - {e.response.text}")
+        return None
 
 def estimate_games_played(master_points, win_rate):
     return master_points/(900.0*win_rate + 100.0)
@@ -56,6 +69,15 @@ if __name__ == '__main__':
     region = "euw1"
     summoner_name = get_my_accounts()
     champ_dict = get_champion_id_map()
-    for champ in champ_dict:
-        get_total_mastery(riot_api_key, region, summoner_name, champ, champ_dict[champ])
+    master_dict = {}
+    master_dict['total'] = {}
+    for summoner in summoner_name:
+        master_dict[summoner] = test_get_mastery_points(riot_api_key, region, summoner_name)
+    for summoner in summoner_name:
+        for champ in champ_dict:
+            champion_name = champ_dict[champ]
+            master_dict['total'][champion_name] += master_dict[summoner][champ]['championPoints']
+    print(master_dict['total'])
+    #for champ in champ_dict:
+    #    get_total_mastery(riot_api_key, region, summoner_name, champ, champ_dict[champ])
     
