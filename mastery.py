@@ -1,15 +1,16 @@
 from riotwatcher import LolWatcher, ApiError
-from my_secrets import get_api_key
+from my_secrets import get_api_key, get_my_accounts
 import requests
 
-def get_mastery_points(api_key, region, summoner_name, champion_id):
+
+def get_mastery_points(api_key: str, region: str, summoner_name: str, champion_id: int) -> int:
     # Initialize the LolWatcher with your API key
     watcher = LolWatcher(api_key)
     try:
         # Get summoner information
-        summoner = watcher.summoner.by_name(region, summoner_name)
+        summoner = watcher.summoner.by_puuid(region, summoner_name)
         # Get mastery information for the given champion
-        champion_mastery = watcher.champion_mastery.by_summoner(region, summoner["id"])
+        champion_mastery = watcher.champion_mastery.by_puuid(region, summoner["puuid"])
         for mastery in champion_mastery:
             if mastery["championId"] == champion_id:
                 return mastery["championPoints"]
@@ -39,21 +40,20 @@ def get_champion_id_map() -> dict:
         champion_map[champ_id] = details["name"]
     return champion_map
 
-# Replace with your Riot API key
-riot_api_key = get_api_key()
+def get_total_mastery(api_key: str, region: str, summoner_names: list) -> None:
+    # This is the champion ID for Yasuo
+    champion_id = 157
+    total = 0
+    for summoner in summoner_name:
+        print(summoner)
+        mastery_points = get_mastery_points(riot_api_key, region, summoner, champion_id)
+        if mastery_points is not None:
+            total += mastery_points 
+    print(f"The total mastery points for Yasuo are: {total}")
 
-# Replace with the region, summoner name, and champion ID you want to use
-region = "euw1"
-#summoner_name = ["Singhasong", "tsuki no kokyuu", "Stroblitz"]
-summoner_name = []
-# This is the champion ID for Yasuo
-champion_id = 157
-total = 0
-for summoner in summoner_name:
-    mastery_points = get_mastery_points(riot_api_key, region, summoner, champion_id)
-    if mastery_points is not None:
-        total += mastery_points 
-
-games = estimate_games_played(total, 0.70)
-print(f"The total mastery points for Yasuo are: {total}")
-print(f"The total estimated games for Yasuo are: {games}")
+if __name__ == '__main__':
+    # Replace with your Riot API key
+    riot_api_key = get_api_key()
+    region = "euw1"
+    summoner_name = get_my_accounts()
+    get_total_mastery(riot_api_key, region, summoner_name)
