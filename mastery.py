@@ -1,6 +1,7 @@
 from riotwatcher import LolWatcher, ApiError
 from my_secrets import get_api_key, get_my_accounts
 import requests
+import json
 
 
 def get_mastery_points(api_key: str, region: str, summoner_name: str, champion_id: int) -> int:

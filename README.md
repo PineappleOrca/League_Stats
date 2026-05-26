@@ -14,7 +14,8 @@ Finally I would like to create a front end display for this as well in Typescrip
 6. Separate account functionality, the main.py script loops over all the accounts listed in the get_account function
 7. Post Processing file can detect which of my accounts are in the game and sort those into the appropriate processed data folder
 8. Added a Main Menu with options to download data from my account, the other high elo accounts on EUW and finally download data from Korea
-9. added in cross region support for data download
+9. added in cross region support for data download (needs to be updated and test post Riot API changes)
+10. added in functionality to get mastery points sum across all accounts
 
 ## Features To Add
 
@@ -26,11 +27,16 @@ Finally I would like to create a front end display for this as well in Typescrip
    -> user level champion breakdown, overall, ranked, normal, ARAM , Clash, Other
    -> game breakdown, when winning anlysie gold differences CSD GPM etc and store somewhere
 6. Post process all the downloaded match data
+7. Develop main menu feature to display champion mastery
+   -> first download and store all the mastery point data per account then total
+   -> then when the option to display is chosen ask the user if it is an account level breakdown or the total, input champion name to fetch that
+   -> data must be stored in a separate database (different from match one)
+8. Automated account lookup, rather than using a puuid try and see if you can change the code to work like op.gg where it searches for RiotInGameNam#Tag
 
 ## How To Run this code
-
-1. add your Riot API get to the my_secrets.py file , delete the 0 and enter the API key as a string
-2. add your accounts to the list in the my_secrets.py file
+1. Clone Repo to local
+2. Get free API key from Riot developer portal
+2. add key to .env file and account names as well + puuid which can be found on the developer portal
 3. in the main.py file, change the region to the appropriate region your account is located in
 4. run main.py
 
