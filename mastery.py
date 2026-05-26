@@ -40,20 +40,22 @@ def get_champion_id_map() -> dict:
         champion_map[champ_id] = details["name"]
     return champion_map
 
-def get_total_mastery(api_key: str, region: str, summoner_names: list) -> None:
+def get_total_mastery(api_key: str, region: str, summoner_names: list, champion_id: int, champion_name: str) -> None:
     # This is the champion ID for Yasuo
-    champion_id = 157
+    #champion_id = 157
     total = 0
     for summoner in summoner_name:
-        print(summoner)
         mastery_points = get_mastery_points(riot_api_key, region, summoner, champion_id)
         if mastery_points is not None:
             total += mastery_points 
-    print(f"The total mastery points for Yasuo are: {total}")
+    print(f"{champion_name}: {total}")
 
 if __name__ == '__main__':
     # Replace with your Riot API key
     riot_api_key = get_api_key()
     region = "euw1"
     summoner_name = get_my_accounts()
-    get_total_mastery(riot_api_key, region, summoner_name)
+    champ_dict = get_champion_id_map()
+    for champ in champ_dict:
+        get_total_mastery(riot_api_key, region, summoner_name, champ, champ_dict[champ])
+    
