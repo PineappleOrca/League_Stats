@@ -31,7 +31,10 @@ def get_account_map() -> dict:
         os.getenv("SMURF_2"): os.getenv("SMURF_2_NAME"),
         os.getenv("BROVY_PUUID"): os.getenv("BROVY_IGN"),
         os.getenv("TWP_1_PUUID"): os.getenv("TWP_1_IGN"),
-        os.getenv("TWP_2_PUUID"): os.getenv("TWP_2_IGN")
+        os.getenv("TWP_2_PUUID"): os.getenv("TWP_2_IGN"),
+        os.getenv("PZZANG_1_PUUID"): os.getenv("PZZANG_1_IGN"),
+        os.getenv("PZZANG_2_PUUID"): os.getenv("PZZANG_2_IGN"),
+        os.getenv("PZZANG_3_PUUID"): os.getenv("PZZANG_3_IGN")
     }
 
 def get_ign(account_id: str) -> str:
